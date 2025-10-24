@@ -1,0 +1,63 @@
+# SPDX-License-Identifier: GPL-3.0
+# Copyright (c) 2025 Schubert Anselme <schubert@anselm.es>
+
+---
+config:
+  signing:
+    default:
+      expiry: 8760h  # Certificate validity period: 1 year (365 days * 24 hours)
+    profiles:
+      ca:
+        expiry: 8700h  # Slightly shorter than default to ensure renewal before root expires
+        usages:
+          - signing           # Can sign other certificates
+          - digital signature # Can create digital signatures
+          - cert sign         # Can sign certificates (CA capability)
+          - crl sign          # Can sign Certificate Revocation Lists
+          - key encipherment  # Can encrypt symmetric keys
+          - server auth       # Can authenticate servers (TLS server certificates)
+          - client auth       # Can authenticate clients (TLS client certificates)
+        ca_constraint:
+          is_ca: true  # Mark this certificate as a Certificate Authority
+      tls:
+        expiry: 8760h
+        usages:
+          - signing
+          - key encipherment
+          - server auth
+ca:
+  CN: Root CA  # Common Name: identifies the certificate authority
+  key:
+    algo: rsa   # Algorithm: RSA (alternatives: ecdsa)
+    size: 4096  # Key size: 4096 bits for strong security (minimum 2048)
+  names:
+    - C: CA                        # Country: Canada
+      L: ON                        # Locality: Ontario
+      ST: Toronto                  # State/Province: Toronto
+      O: ANSELMES                # Organization: ANSELMES
+      OU: Certificate Authority    # Organizational Unit: Certificate Authority division
+intermediate:
+  CN: Intermediate CA  # Common Name: identifies the intermediate certificate authority
+  key:
+    algo: rsa   # Algorithm: RSA for compatibility
+    size: 4096  # Key size: 4096 bits matching root CA security level
+  names:
+    - C: CA                        # Country: Canada (matching root CA)
+      L: ON                        # Locality: Ontario (matching root CA)
+      ST: Toronto                  # State/Province: Toronto (matching root CA)
+      O: ANSELMES                # Organization: ANSELMES (matching root CA)
+      OU: Certificate Authority    # Organizational Unit: Certificate Authority division
+tls:
+  CN: localhost  # Common Name: identifies the certificate
+  key:
+    algo: rsa   # Algorithm: RSA for compatibility
+    size: 4096  # Key size: 4096 bits matching root CA security level
+  names:
+    - C: CA                        # Country: Canada (matching root CA)
+      L: ON                        # Locality: Ontario (matching root CA)
+      ST: Toronto                  # State/Province: Toronto (matching root CA)
+      O: ANSELMES                # Organization: ANSELMES (matching root CA)
+      OU: Certificate Authority    # Organizational Unit: Certificate Authority division
+  hosts:
+    - localhost
+    - 127.0.0.1
