@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+[[ $1 == "--version" ]] && echo "v1.0.0" && exit 0
+[[ $1 == "--help" ]] && echo "Usage: $(basename $0) [COMMAND] [ARGS...]
+Options:
+  --help       Show this help message
+  --version    Show version information
+" && exit 0
+PATH=".:$PATH" $1 ${@:2}
