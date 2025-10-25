@@ -1,5 +1,7 @@
-# Project Files
+# Project Directory
 .build/
+
+# Project Files
 *.csr
 *.env
 *.json
