@@ -1,0 +1,69 @@
+version: 2
+updates:
+  - # Maintain dependencies for GitHub Actions
+    package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: daily
+    cooldown:
+      default-days: 7
+
+  # - # Maintain dependencies for Docker
+  #   package-ecosystem: docker
+  #   directories:
+  #     - /go
+  #     - /python
+  #     - /rust
+  #     - /swift
+  #   schedule:
+  #     interval: monthly
+  #   cooldown:
+  #     default-days: 7
+
+  # - # Maintain dependencies for Docker Compose
+  #   package-ecosystem: docker-compose
+  #   directories: []
+  #   schedule:
+  #     interval: monthly
+  #   cooldown:
+  #     default-days: 7
+
+  # - # Maintain dependencies for Helm Chart
+  #   package-ecosystem: helm
+  #   directory: /chart
+  #   schedule:
+  #     interval: monthly
+  #   cooldown:
+  #     default-days: 7
+
+  # - # Maintain dependencies for Go
+  #   package-ecosystem: gomod
+  #   directory: /go
+  #   schedule:
+  #     interval: weekly
+  #   cooldown:
+  #     default-days: 7
+
+  # - # Maintain dependencies for Python
+  #   package-ecosystem: uv
+  #   directory: /python
+  #   schedule:
+  #     interval: weekly
+  #   cooldown:
+  #     default-days: 7
+
+  # - # Maintain dependencies for Rust
+  #   package-ecosystem: cargo
+  #   directory: /rust
+  #   schedule:
+  #     interval: weekly
+  #   cooldown:
+  #     default-days: 7
+
+  # - # Maintain dependencies for Swift
+  #   package-ecosystem: swift
+  #   directory: /swift
+  #   schedule:
+  #     interval: weekly
+  #   cooldown:
+  #     default-days: 7
