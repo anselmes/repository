@@ -1,0 +1,8 @@
+# Workflow action references are pinned to tag refs and verified against
+# .github/workflows/actions.lock (managed by `gh actions-lock`) instead of
+# bare commit SHAs in-line. unpinned-uses is scoped off for these files
+# since the lockfile provides the same integrity guarantee.
+rules:
+  unpinned-uses:
+    ignore:
+      - ci.yml
