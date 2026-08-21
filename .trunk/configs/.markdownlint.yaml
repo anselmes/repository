@@ -1,2 +1,14 @@
-# Prettier friendly markdownlint config (all formatting rules disabled)
+# Markdownlint config (based on markdownlint/style/prettier)
 extends: markdownlint/style/prettier
+# Tweaks to the base config are defined below (e.g., line length)
+default: true
+blank_lines: false
+bullet: false
+html: false
+indentation: false
+spaces: false
+url: false
+whitespace: false
+headings: false
+line-length:
+  line_length: 800

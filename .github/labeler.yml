@@ -19,13 +19,13 @@ ci:
           - .trunk/*/**
 
 # Add 'container' label to any changes in 'compose.yml' or 'Dockerfile'
-# container:
-#   - changed-files:
-#       - any-glob-to-any-file:
-#           - "*/**/compose.yml"
-#           - "*/**/Dockerfile"
-#           - "*/compose.yml"
-#           - "*/Dockerfile"
+container:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "*/**/compose.yml"
+          - "*/**/Dockerfile"
+          - "*/compose.yml"
+          - "*/Dockerfile"
 
 # Add 'chart' label to any changes in the 'chart' directory
 # chart:
@@ -38,39 +38,40 @@ ci:
 # toolchain:
 #   - changed-files:
 #       - any-glob-to-any-file:
+#           - *.sh
+#           - **/*.sh
 #           - scripts/*
 #           - scripts/*/**
 #           - tools/*
 #           - tools/*/**
-#           - hack/*.sh
 
-# Add 'go' label to any changes in the 'go' directory
+# Add 'go' label to any changes in Go files
 # go:
 #   - changed-files:
 #       - any-glob-to-any-file:
-#           - go/*
-#           - go/*/**
+#           - "*/*.go"
+#           - "*/**/*.go"
 
-# Add 'python' label to any changes in the 'python' directory
+# Add 'python' label to any changes in Python files
 # python:
 #   - changed-files:
 #       - any-glob-to-any-file:
-#           - python/*
-#           - python/*/**
+#           - "*/*.py"
+#           - "*/**/*.py"
 
-# Add 'rust' label to any changes in the 'rust' directory
+# Add 'rust' label to any changes in Rust files
 # rust:
 #   - changed-files:
 #       - any-glob-to-any-file:
-#           - rust/*
-#           - rust/*/**
+#           - "*/*.rs"
+#           - "*/**/*.rs"
 
-# Add 'swift' label to any changes in the 'swift' directory
+# Add 'swift' label to any changes in Swift files
 # swift:
 #   - changed-files:
 #       - any-glob-to-any-file:
-#           - swift/*
-#           - swift/*/**
+#           - "*/*.swift"
+#           - "*/**/*.swift"
 
 # Add 'docs' label to any changes in the 'docs' directory
 docs:
