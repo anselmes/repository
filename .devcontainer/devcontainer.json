@@ -3,9 +3,7 @@
   "service": "workspace",
   "workspaceFolder": "/home/ubuntu/workspace",
   "remoteUser": "ubuntu",
-  "dockerComposeFile": [
-    "${localWorkspaceFolder}/.devcontainer/compose-dev.yaml"
-  ],
+  "dockerComposeFile": ["${localWorkspaceFolder}/.devcontainer/compose.yaml"],
   "customizations": {
     "vscode": {
       "extensions": [
