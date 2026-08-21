@@ -1,0 +1,96 @@
+# This workflow is managed by gh actions-lock.
+
+name: Continuous Integration
+
+on:
+  - push
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    if: github.ref_type != 'tag'
+    permissions:
+      checks: write
+      contents: read
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@b09bb98e06d4d774595224525879c09bc6e98c40 # v2.20.1
+        with:
+          egress-policy: block
+          allowed-endpoints: >
+            api.github.com:443
+            api0.prismacloud.io:443
+            codeload.github.com:443
+            ghcr.io:443
+            github.com:443
+            objects.githubusercontent.com:443
+            pipelines.actions.githubusercontent.com:443
+            pypi.org:443
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Lint Code Base
+        uses: super-linter/super-linter@4ce20838b8ab83717e78138c5b3a1407148e0918 # v8.7.0
+        env:
+          DEFAULT_BRANCH: main
+          GITHUB_TOKEN: ${{ github.token }}
+          # VALIDATE_CHECKOV: false
+          # VALIDATE_EDITORCONFIG: false
+          # VALIDATE_NATURAL_LANGUAGE: false
+          # VALIDATE_TRIVY: false
+          # VALIDATE_YAML: false
+
+  # dependabot auto-approve/merge and tag-triggered draft-release creation are
+  # provided by anselmes/cicd's bot.yml. releaser publishes as a draft — a
+  # published release becomes immutable immediately, before release.yml has
+  # built anything, so release.yml attaches assets to the draft and flips it
+  # to published once the build is done.
+  bot:
+    uses: anselmes/cicd/.github/workflows/bot.yml@9d2e8f600435e2d7e6243b026022288ca1e14864 # v0.3.6
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+      repository-projects: write
+
+  # trivy.yml's SARIF-to-code-scanning upload only ever runs on
+  # `main`+push, and fails there: GitHub Advanced Security (required for
+  # code scanning on private repos) isn't purchasable for a user-owned
+  # account -- confirmed via the REST API (security_and_analysis: null).
+  # The scan itself still runs and succeeds everywhere else, so only skip
+  # the one combination that's guaranteed to fail.
+  trivy:
+    uses: anselmes/cicd/.github/workflows/trivy.yml@9d2e8f600435e2d7e6243b026022288ca1e14864 # v0.3.6
+    if: >-
+      !(github.ref == 'refs/heads/main' && github.event_name == 'push' &&
+        github.event.repository.private && github.event.repository.owner.type == 'User')
+    permissions:
+      actions: read
+      contents: write
+      id-token: write
+      security-events: write
+
+  # scorecard.yml's analysis job only ever runs on `main`, and fails there:
+  # several Scorecard checks need GraphQL access the default GITHUB_TOKEN
+  # can't provide on a private repo ("ListCommits: ... Resource not
+  # accessible by integration"). Since it can never succeed as configured,
+  # skip it outright rather than leave a permanently-red required check.
+  scorecard:
+    uses: anselmes/cicd/.github/workflows/scorecard.yml@9d2e8f600435e2d7e6243b026022288ca1e14864 # v0.3.6
+    if: >-
+      !(github.event.repository.private && github.event.repository.owner.type == 'User')
+    permissions:
+      contents: read
+      id-token: write
+      security-events: write
+    with:
+      publish-results: false
