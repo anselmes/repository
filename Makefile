@@ -28,7 +28,7 @@ help:
 	@echo "   \033[38;5;117m╰─\033[0m \033[1;97muninstall\033[0m         \033[37mUninstall $(NAME) from $(PREFIX)\033[0m \033[2;90m(requires sudo)\033[0m"
 	@echo ""
 	@echo "   \033[1;93m⚙️  Configuration\033[0m"
-	@echo "   \033[38;5;117m╰─\033[0m \033[1;97mconfig\033[0m            \033[37mGenerate OpenSSL config from cert.yaml\033[0m"
+	@echo "   \033[38;5;117m╰─\033[0m \033[1;97mconfig\033[0m            \033[37mGenerate OpenSSL config from config/cert.yaml\033[0m"
 	@echo ""
 	@echo "   \033[1;93m🔐 Certificates\033[0m"
 	@echo "   \033[38;5;117m╭─\033[0m \033[1;97mrootca\033[0m            \033[37mGenerate root CA certificate\033[0m"
@@ -72,18 +72,18 @@ clean:
 # MARK: - Config
 
 config:
-	yq '.config' cert.yaml -o json >openssl.json
-	@echo "⚙️ OpenSSL configuration generated from cert.yaml!"
+	yq '.config' config/cert.yaml -o json >openssl.json
+	@echo "⚙️ OpenSSL configuration generated from config/cert.yaml!"
 
 # MARK: - Certificate
 
 rootca: config
-	yq '.ca' cert.yaml -o json >ca.json
+	yq '.ca' config/cert.yaml -o json >ca.json
 	cfssl genkey -config openssl.json -profile ca -initca ca.json | cfssljson -bare ca
 	@echo "🔐 Root CA certificate generated successfully!"
 
 ca: rootca
-	yq '.intermediate' cert.yaml -o json >intermediate.json
+	yq '.intermediate' config/cert.yaml -o json >intermediate.json
 	cfssl gencert \
 		-config openssl.json \
 		-profile ca \
@@ -94,7 +94,7 @@ ca: rootca
 	@echo "🔗 Intermediate CA certificate and bundle generated successfully!"
 
 cert: ca
-	yq '.tls' cert.yaml -o json >tls.json
+	yq '.tls' config/cert.yaml -o json >tls.json
 	cfssl gencert \
 		-config openssl.json \
 		-profile tls \
