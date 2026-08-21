@@ -1,4 +1,6 @@
 # Project Files
+pki/*
+
 *.csr
 *.env
 *.pem
