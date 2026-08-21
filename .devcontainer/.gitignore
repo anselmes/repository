@@ -4,7 +4,7 @@
 # Except these files
 !.gitignore
 
-!compose-dev.yaml
+!compose.yaml
 !devcontainer.json
 
 !shell
