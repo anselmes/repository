@@ -38,8 +38,8 @@ brew bundle --file hack/Brewfile
 ```
 
 > [!IMPORTANT]
-> Every commit and release tag must be cryptographically signed. Enable it once
-> with `git config commit.gpgsign true`.
+> Every commit and release tag must be cryptographically signed. Enable both
+> with `git config commit.gpgsign true` and `git config tag.gpgsign true`.
 
 ## Installation
 
