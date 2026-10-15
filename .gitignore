@@ -1,8 +1,8 @@
-# Project Directory
-.build/
-
 # Project Files
+pki/*
+
 *.csr
 *.env
-*.json
 *.pem
+
+!*example.env
