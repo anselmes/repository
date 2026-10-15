@@ -72,7 +72,8 @@ make clean   # remove generated files in pki/
 ## Development
 
 Open the repository in the dev container, or install the tools from
-[Prerequisites](#prerequisites) locally.
+[Prerequisites](#prerequisites) locally. For local development, also install the
+Trunk CLI (`brew install trunk-io/tap/trunk` on macOS).
 
 ```bash
 trunk check   # lint
