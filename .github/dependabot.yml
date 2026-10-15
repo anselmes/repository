@@ -9,7 +9,7 @@ updates:
       default-days: 7
 
   - # Maintain dependencies for Devcontainer
-    package-ecosystem: devcontainer
+    package-ecosystem: devcontainers
     directory: /.devcontainer
     schedule:
       interval: daily
