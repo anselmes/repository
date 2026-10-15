@@ -3,7 +3,7 @@ VERSION := $(shell git describe --tags --always --dirty 2>/dev/null | sed 's/-\(
 
 PREFIX ?= /usr/local/bin
 
-.PHONY: all config rootca ca cert help
+.PHONY: all help setup clean config rootca ca cert
 all: cert
 	@echo "🎯 All targets completed successfully!"
 
@@ -20,6 +20,9 @@ help:
 	@echo "   \033[1;93m⚡ Clean\033[0m"
 	@echo "   \033[38;5;117m╰─\033[0m \033[1;97mclean\033[0m             \033[37mClean generated files\033[0m"
 	@echo ""
+	@echo "   \033[1;93m🛠️  Developer Setup\033[0m"
+	@echo "   \033[38;5;117m╰─\033[0m \033[1;97msetup\033[0m             \033[37mInstall Brewfile tools and gh extensions (actions-lock, stack)\033[0m"
+	@echo ""
 	@echo "   \033[1;93m⚙️  Configuration\033[0m"
 	@echo "   \033[38;5;117m╰─\033[0m \033[1;97mconfig\033[0m            \033[37mGenerate OpenSSL config from config/cert.yaml\033[0m"
 	@echo ""
@@ -30,6 +33,24 @@ help:
 	@echo ""
 	@echo "   \033[2;96m💫 Usage:\033[0m \033[3;37mmake \033[1;97m<target>\033[0m"
 	@echo ""
+
+# MARK: - Setup
+
+GH_EXTENSIONS := github/gh-actions-lock github/gh-stack
+
+# Homebrew cannot install gh extensions, so they are provisioned here after
+# `brew bundle`: gh-actions-lock backs the actions-lock-verify pre-commit hook
+# (`gh actions-lock`) and gh-stack provides stacked PRs (`gh stack`).
+setup:
+	brew bundle --file=hack/Brewfile
+	@for ext in $(GH_EXTENSIONS); do \
+		if gh extension list | grep -q "$$ext"; then \
+			echo "✅ $$ext already installed"; \
+		else \
+			gh extension install "$$ext"; \
+		fi; \
+	done
+	@echo "🛠️ Developer setup complete!"
 
 # MARK: - Build
 

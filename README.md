@@ -20,8 +20,8 @@ repository.
   (`.github/dependabot.yml`, `labeler.yml`, `auto_assign.yml`).
 - **Quality gates**: Trunk (`.trunk/`), pre-commit and commitlint enforce
   linting, formatting and conventional commits.
-- **Dev container**: Ubuntu 24.04 workspace with the recommended VS Code
-  extensions (`.devcontainer/`).
+- **Dev container**: Ubuntu 24.04 workspace with the recommended Visual
+  Studio Code extensions (`.devcontainer/`).
 - **PKI helpers**: `make` targets generate a root CA, an intermediate CA and TLS
   certificates with `cfssl`, configured by `config/cert.yaml`.
 
@@ -33,8 +33,20 @@ repository.
 - Docker, to use the dev container
 - Homebrew (macOS), to install the tools above in one step
 
+Run `make setup` once after cloning. It installs the tools in
+`hack/Brewfile` (`brew bundle`) and the `github/gh-actions-lock` and
+`github/gh-stack` GitHub CLI extensions.
+
+`gh` comes from the Brewfile, but `gh` extensions are not Homebrew packages and
+cannot be listed there. The `actions-lock-verify` pre-commit hook
+(`language: system`, so pre-commit installs nothing for it) runs
+`gh actions-lock --verify-local` on commits that touch `.github/workflows/`.
+Without the extension, those commits fail with an unknown-command error. To
+install the extensions manually:
+
 ```bash
-brew bundle --file hack/Brewfile
+gh extension install github/gh-actions-lock
+gh extension install github/gh-stack
 ```
 
 > [!IMPORTANT]
