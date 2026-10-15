@@ -1,0 +1,60 @@
+# This workflow is managed by gh actions-lock.
+
+name: Release
+
+on:
+  release:
+    types:
+      - published
+  push:
+    # ci.yml's bot job (anselmes/cicd's bot.yml) publishes as a draft (see the
+    # release job's "Publish the GitHub Release" step below), and a draft
+    # never fires release: published on its own -- so this is the trigger
+    # that actually starts the pipeline for bot-created releases.
+    tags:
+      - v*
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    name: release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@e14015d583714f6e62063499dc959a02595150a1 # v2.21.1
+        with:
+          egress-policy: block
+          allowed-endpoints: >
+            api.github.com:443
+            github.com:443
+            uploads.github.com:443
+      - name: Wait for the GitHub Release draft to exist
+        # The push-tag trigger (see the `on:` comment above) can race the
+        # bot's tag-triggered release creation in ci.yml.
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          TAG_NAME: ${{ github.event.release.tag_name || github.ref_name }}
+        run: |
+          set -euo pipefail
+          for _ in $(seq 1 30); do
+            gh release view "$TAG_NAME" --repo "$REPO" >/dev/null 2>&1 && exit 0
+            sleep 10
+          done
+          echo "::error::Release $TAG_NAME never appeared after 5m" >&2
+          exit 1
+      - name: Publish the GitHub Release
+        # ci.yml's bot job (anselmes/cicd's bot.yml releaser) publishes as a
+        # draft (immutability locks a release the instant it's published,
+        # before assets can be attached). This package is a library and
+        # attaches no assets, so the draft is flipped to published as soon as
+        # it exists. Add any asset-building steps before this one.
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          TAG_NAME: ${{ github.event.release.tag_name || github.ref_name }}
+        run: gh release edit "$TAG_NAME" --draft=false --repo "$REPO"
