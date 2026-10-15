@@ -22,10 +22,8 @@ ci:
 container:
   - changed-files:
       - any-glob-to-any-file:
-          - "*/**/compose.yml"
-          - "*/**/Dockerfile"
-          - "*/compose.yml"
-          - "*/Dockerfile"
+          - "**/compose.{yml,yaml}"
+          - "**/Dockerfile"
 
 # Add 'chart' label to any changes in the 'chart' directory
 # chart:
