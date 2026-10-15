@@ -19,7 +19,7 @@
       "sentence-case"
     ],
     "type-enum": [
-      1,
+      2,
       "always",
       [
         "build",
