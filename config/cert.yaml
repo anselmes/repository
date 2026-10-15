@@ -31,10 +31,10 @@ ca:
     algo: rsa # Algorithm: RSA (alternatives: ecdsa)
     size: 4096 # Key size: 4096 bits for strong security (minimum 2048)
   names:
-    - C: CA # Country: Canada
-      L: ON # Locality: Ontario
-      ST: Toronto # State/Province: Toronto
-      O: ANSELMES # Organization: ANSELMES
+    - C: __country__ # Country: ISO 3166-1 alpha-2 code
+      L: __locality__ # Locality: city
+      ST: __state__ # State/Province
+      O: __organization__ # Organization
       OU: Certificate Authority # Organizational Unit: Certificate Authority division
 intermediate:
   CN: Intermediate CA # Common Name: identifies the intermediate certificate authority
@@ -42,10 +42,10 @@ intermediate:
     algo: rsa # Algorithm: RSA for compatibility
     size: 4096 # Key size: 4096 bits matching root CA security level
   names:
-    - C: CA # Country: Canada (matching root CA)
-      L: ON # Locality: Ontario (matching root CA)
-      ST: Toronto # State/Province: Toronto (matching root CA)
-      O: ANSELMES # Organization: ANSELMES (matching root CA)
+    - C: __country__ # Country: ISO 3166-1 alpha-2 code (matching root CA)
+      L: __locality__ # Locality: city (matching root CA)
+      ST: __state__ # State/Province (matching root CA)
+      O: __organization__ # Organization (matching root CA)
       OU: Certificate Authority # Organizational Unit: Certificate Authority division
 tls:
   CN: localhost # Common Name: identifies the certificate
@@ -53,10 +53,10 @@ tls:
     algo: rsa # Algorithm: RSA for compatibility
     size: 4096 # Key size: 4096 bits matching root CA security level
   names:
-    - C: CA # Country: Canada (matching root CA)
-      L: ON # Locality: Ontario (matching root CA)
-      ST: Toronto # State/Province: Toronto (matching root CA)
-      O: ANSELMES # Organization: ANSELMES (matching root CA)
+    - C: __country__ # Country: ISO 3166-1 alpha-2 code (matching root CA)
+      L: __locality__ # Locality: city (matching root CA)
+      ST: __state__ # State/Province (matching root CA)
+      O: __organization__ # Organization (matching root CA)
       OU: Certificate Authority # Organizational Unit: Certificate Authority division
   hosts:
     - localhost
